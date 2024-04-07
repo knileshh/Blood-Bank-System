@@ -21,6 +21,7 @@
             </div>
             <div class="card-body">
                 <?php
+
                 require_once 'config.php';
 
                 // Registration logic for hospitals

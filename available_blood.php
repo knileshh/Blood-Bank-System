@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once 'config.php';
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,18 +19,38 @@
     </style>
 </head>
 <body>
-    <?php
-        session_start();
-        require_once 'config.php';
-    ?>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="available_blood.php">Blood Bank System</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <?php if (isset($_SESSION['user_id']) && $_SESSION['user_type'] === 'hospital'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="add_blood_info.php">Add Blood Info</a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="available_blood.php">Available Blood Samples</a>
+                    </li>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="logout.php">Logout</a>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login.php">Login</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="card">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h4>Available Blood Samples</h4>
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
-                <?php endif; ?>
-            </div>
             <div class="card-body">
                 <?php
                     // Retrieve available blood samples from the database

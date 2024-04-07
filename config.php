@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "blood_bank_system";
+$username = "id22018907_admin";
+$password = "admin@CRA8";
+$dbname = "id22018907_blood_bank_system";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

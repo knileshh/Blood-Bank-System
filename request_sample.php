@@ -1,14 +1,16 @@
 <?php
-    session_start();
-    require_once 'config.php';
+session_start();
 
-    // Check if the user is logged in as a receiver
-    if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'receiver') {
-        header("Location: login.php");
-        exit();
-    }
+require_once 'config.php';
 
-    // Retrieve the necessary parameters from the request
+// Check if the user is logged in as a receiver
+if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'receiver') {
+    header("Location: login.php");
+    exit();
+}
+
+// Retrieve the necessary parameters from the request
+if (isset($_GET['sample_id']) && isset($_GET['blood_group'])) {
     $sample_id = $_GET['sample_id'];
     $receiver_id = $_SESSION['user_id'];
     $blood_group = $_GET['blood_group'];
@@ -22,14 +24,19 @@
     $hospital_id = $row['hospital_id'];
 
     // Insert the blood sample request into the database
-    $stmt = $conn->prepare("INSERT INTO blood_requests (receiver_id, blood_sample_id, hospital_id, request_date, status) VALUES (?, ?, ?, NOW(), 'pending')");
-    $stmt->bind_param("iii", $receiver_id, $sample_id, $hospital_id);
-
+    $stmt = $conn->prepare("INSERT INTO blood_requests (receiver_id, blood_group, hospital_id, request_date) VALUES (?, ?, ?, NOW())");
+    $stmt->bind_param("iss", $receiver_id, $blood_group, $hospital_id);
     if ($stmt->execute()) {
         // Redirect the user back to the available_blood.php page with a success message
         header("Location: available_blood.php?success=1");
+        exit();
     } else {
         // Redirect the user back to the available_blood.php page with an error message
         header("Location: available_blood.php?error=1");
+        exit();
     }
-?>
+} else {
+    // Redirect the user back to the available_blood.php page with an error message
+    header("Location: available_blood.php?error=1");
+    exit();
+}
